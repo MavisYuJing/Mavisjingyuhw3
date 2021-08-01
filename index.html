@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <div class="input_slot">
+            <label for="one">Col-Start-Point</label>
+            <span>
+                <input style="width: 80px;" id="one" type="number"/>
+            </span>
+
+            <label for="two">Col-End-Point</label>
+            <span>
+                <input style="width: 80px;" id="two"  type="number"/>
+            </span>
+
+            <label for="three">Row-Start-Point</label>
+            <span>
+                <input style="width: 80px;" id="three"  type="number"/>
+            </span>
+
+            <label for="four">Row-End-Point</label>
+            <span>
+                <input style="width: 80px;" id='four'  type="number"/>
+            </span>
+        </div>
+        <div class="alert_slot"></div>
+        <div class="btn" id="btn">Submit</div>
+        <div class="table_slot" id="table_slot">
+            
+        </div>
+    </main>
+    <script>
+        function customAlert(msg,time = false){
+            let dom = document.getElementsByClassName("alert_slot")
+            if(dom.length > 0){
+                dom[0].innerHTML = msg
+            }
+            if(!time)
+            setTimeout(function(){
+                dom[0].innerHTML ="" 
+            },1000)
+        }
+        //https://www.developphp.com/video/JavaScript/Custom-Alert-Box-Programming-Tutorial
+ 
+        function render(one, two, three, four){
+            let dom = document.getElementById("table_slot")
+            let {scrollTop: top, scrollLeft: left} = dom
+           
+            let html = ""
+            let head = ""
+            for(let y = three ; y <= four ; y++){
+
+                html += `<tr>`
+                for(let x = one; x <= two ; x ++ ){
+
+                    if(y === three){
+                        if(x === one){
+                            head +=  `<tr><th style='z-index: 88;position:relative;top: ${top}px'></th><th style='z-index: 88;position:relative;top: ${top}px'>${x}</th>`
+                        }else{
+                            head +=  `<th style='z-index: 88;position:relative;top: ${top}px'>${x}</th>`
+                        }
+                    }
+                    
+                    if(x === one){
+                        html += `<td style='z-index: 8;position:relative;left: ${left}px'>${y}</div></td><td>${parseInt(x*y)}</td>`
+                    }else{
+                        html += `<td>${parseInt(x*y)}</td>`
+                    }
+                }
+                html += `</tr>`
+
+                if(y === three){
+                    head += "</tr>"
+                }
+            }
+            //https://www.w3schools.com/react/react_render.asp
+            dom.innerHTML = `
+                <table class="tb" cellspacing="0" cellpadding="10"  border="1">
+                    <thead>
+                        ${head}
+                    </thead>
+                    <tbody>
+                        ${html}
+                    </tbody>
+                </table>`
+            customAlert("DONE!!!")
+        }
+        //https://www.w3schools.com/jsref/prop_html_innerhtml.asp
+        window.onload = function(){
+            document.getElementById("table_slot")
+            document.getElementById("table_slot").addEventListener("scroll",function(e){
+                console.log(e)
+                let {scrollLeft:left,scrollTop:top} = e.target
+                let trs = document.getElementsByTagName("tr")
+ 
+                for(let i=0; i<trs.length; i++){
+                    trs.item(i).firstElementChild.setAttribute("style",`z-index: 8;position:relative;left: ${left}px`)
+                    if(i===0){
+                        for(let j = 0 ; j<trs[i].children.length; j++){
+                            trs.item(i).children.item(j).setAttribute("style",`z-index: 88;position:relative;top: ${top}px`)
+                        }
+                    }
+                   
+                }
+            })
+            //https://www.plus2net.com/javascript_tutorial/window-onload.php#:~:text=as%20page%20loads-,Window.,as%20the%20page%20is%20loaded.
+            document.getElementById("btn").addEventListener("click",function(){
+                let one = parseInt(document.getElementById("one").value)
+                let two =  parseInt(document.getElementById("two").value)
+                let three =  parseInt(document.getElementById("three").value)
+                let four =  parseInt(document.getElementById("four").value)
+
+                // if(!one || !two || !three || !four){
+                //     if(one === 0 || two === 0 || three === 0 || four === 0 ){
+                //         return render(one, two, three, four)
+                //     }else{
+                //         return customAlert("please enter digital data")
+                //     }
+                   
+                // }
+                if(isNaN(one)||isNaN(two)||isNaN(three)||isNaN(four)){
+                    customAlert("please provide a valid digit")
+                    return
+                }
+             
+                if( one >= two || three >= four){
+                    customAlert("the start point is larger than the end point, please try another one")
+                    return
+                }
+                if( -51 < one &&  one <= 50 && -51 < two &&  two <= 50 && -51 < three &&  three <= 50 && -51 < four &&  four <= 50){
+                    render(one, two, three, four)
+                }else{
+                    customAlert("Please enter a number in the range of - 50 to 50")
+                }
+                //https://www.w3schools.com/js/js_if_else.asp
+
+            })
+           
+            
+            
+        }
+    </script>
+</body>
+</html>
